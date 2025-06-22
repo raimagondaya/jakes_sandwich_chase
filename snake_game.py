@@ -1,6 +1,7 @@
 from tkinter import *
 import random
 import pygame
+from PIL import Image, ImageTk
 
 GAME_WIDTH = 800
 GAME_HEIGHT = 600
@@ -23,22 +24,74 @@ class Snake(GameObject):
     def __init__(self, canvas):
         self.body_size = BODY_PARTS
         self.coordinates = [[0, 0] for _ in range(self.body_size)]
-        self.squares = []
+        self.images = []
         self.canvas = canvas
 
-        for x_axis, y_axis in self.coordinates:
-            square = canvas.create_rectangle(x_axis, y_axis, x_axis + SPACE_SIZE, y_axis + SPACE_SIZE, fill=SNAKE_COLOR, tag="snake")
-            self.squares.append(square)
+        self.current_direction = 'down'
+
+        self.head_images = self.load_rotated_images("jake_head.png")
+        self.body_images = self.load_rotated_images("jake_body.png")
+        self.tail_images = self.load_rotated_images("jake_bottom.png")
+
+        for i, (x_axis, y_axis) in enumerate(self.coordinates):
+            if i == 0:
+                image_id = canvas.create_image(x_axis, y_axis, image=self.head_images['right'], anchor="nw", tag="snake")
+            elif i == self.body_size - 1:
+                image_id = canvas.create_image(x_axis, y_axis, image=self.tail_images['right'], anchor="nw", tag="snake")
+            else:
+                image_id = canvas.create_image(x_axis, y_axis, image=self.body_images['right'], anchor="nw", tag="snake")
+            self.images.append(image_id)
+
+
+    def load_rotated_images(self, filename):
+        base_image = Image.open(filename).resize((SPACE_SIZE, SPACE_SIZE))
+        return {
+            "up": ImageTk.PhotoImage(base_image),
+            "down": ImageTk.PhotoImage(base_image.rotate(180)),
+            "left": ImageTk.PhotoImage(base_image.rotate(90)),
+            "right": ImageTk.PhotoImage(base_image.rotate(-90))
+        }
+
+    def set_direction(self, new_direction):
+        self.current_direction = new_direction
 
     def grow(self, x_axis, y_axis):
         self.coordinates.insert(0, (x_axis, y_axis))
-        square = self.canvas.create_rectangle(x_axis, y_axis, x_axis + SPACE_SIZE, y_axis + SPACE_SIZE, fill=SNAKE_COLOR)
-        self.squares.insert(0, square)
+        image = self.head_images[self.current_direction]
+        image_id = self.canvas.create_image(x_axis, y_axis, image=image, anchor="nw", tag="snake")
+        self.images.insert(0, image_id)
+
+        if len(self.images) > 1:
+            old_head_id = self.images[1]
+            self.canvas.itemconfig(old_head_id, image=self.body_images[self.current_direction])
+
+        if len(self.images) >= 2:
+            tail_id = self.images[-1]
+            self.canvas.itemconfig(tail_id, image=self.tail_images[self.current_direction])
+
 
     def shrink(self):
-        del self.coordinates[-1]
-        self.canvas.delete(self.squares[-1])
-        del self.squares[-1]
+        self.coordinates.pop()
+        self.canvas.delete(self.images[-1])
+        self.images.pop()
+
+        if len(self.coordinates) >= 2:
+            x1, y1 = self.coordinates[-2]
+            x2, y2 = self.coordinates[-1]
+
+            if x1 > x2:
+                tail_dir = 'right'
+            elif x1 < x2:
+                tail_dir = 'left'
+            elif y1 > y2:
+                tail_dir = 'down'
+            else:
+                tail_dir = 'up'
+
+
+            tail_id = self.images[-1]
+            self.canvas.itemconfig(tail_id, image=self.tail_images[tail_dir])
+
 
 class Food(GameObject):
     def __init__(self, canvas):
@@ -67,7 +120,7 @@ def next_turn():
     snake.grow(x_axis, y_axis)
 
     food_x, food_y = food.get_position()
-    
+
     if x_axis == food_x and y_axis == food_y:
         eat_sound.play()
         score += 1
@@ -87,6 +140,7 @@ def change_direction(new_direction):
     opposites = {'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left'}
     if direction != opposites.get(new_direction):
         direction = new_direction
+        snake.set_direction(new_direction)
 
 def check_collisions():
     x, y = snake.coordinates[0]
