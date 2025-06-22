@@ -61,6 +61,7 @@ def next_turn():
     snake.grow(x, y)
 
     if x == food.coordinates[0] and y == food.coordinates[1]:
+        eat_sound.play()
         score += 1
         label.config(text="Score:{}".format(score))
         canvas.delete("food")
@@ -124,6 +125,8 @@ food = Food(canvas)
 pygame.mixer.init()
 pygame.mixer.music.load(r"C:\Users\ACER\Desktop\final_project\adventure_time_bg_music.wav")
 pygame.mixer.music.play(-1)
+
+eat_sound = pygame.mixer.Sound("eat_sound.wav")
 
 next_turn()
 window.mainloop()
