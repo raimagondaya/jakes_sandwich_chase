@@ -12,9 +12,12 @@ FOOD_COLOR = "#FF0000"
 BACKGROUND_COLOR = "#000000"
 
 class GameObject:
-    def __init__(self, canvas, x, y):
+    def __init__(self, canvas, x_axis, y_axis):
         self.canvas = canvas
-        self.coordinates = [x, y]
+        self.coordinates = [x_axis, y_axis]
+
+    def get_position(self):
+        return self.coordinates
 
 class Snake(GameObject):
     def __init__(self, canvas):
@@ -63,7 +66,9 @@ def next_turn():
 
     snake.grow(x_axis, y_axis)
 
-    if x_axis == food.coordinates[0] and y_axis == food.coordinates[1]:
+    food_x, food_y = food.get_position()
+    
+    if x_axis == food_x and y_axis == food_y:
         eat_sound.play()
         score += 1
         label.config(text="Score:{}".format(score))
