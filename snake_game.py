@@ -23,13 +23,13 @@ class Snake(GameObject):
         self.squares = []
         self.canvas = canvas
 
-        for x, y in self.coordinates:
-            square = canvas.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOR, tag="snake")
+        for x_axis, y_axis in self.coordinates:
+            square = canvas.create_rectangle(x_axis, y_axis, x_axis + SPACE_SIZE, y_axis + SPACE_SIZE, fill=SNAKE_COLOR, tag="snake")
             self.squares.append(square)
 
-    def grow(self, x, y):
-        self.coordinates.insert(0, (x, y))
-        square = self.canvas.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOR)
+    def grow(self, x_axis, y_axis):
+        self.coordinates.insert(0, (x_axis, y_axis))
+        square = self.canvas.create_rectangle(x_axis, y_axis, x_axis + SPACE_SIZE, y_axis + SPACE_SIZE, fill=SNAKE_COLOR)
         self.squares.insert(0, square)
 
     def shrink(self):
@@ -39,31 +39,31 @@ class Snake(GameObject):
 
 class Food(GameObject):
     def __init__(self, canvas):
-        x = random.randint(0, (GAME_WIDTH // SPACE_SIZE) - 1) * SPACE_SIZE
-        y = random.randint(0, (GAME_HEIGHT // SPACE_SIZE) - 1) * SPACE_SIZE
-        super().__init__(canvas, x, y)
+        x_axis = random.randint(0, (GAME_WIDTH // SPACE_SIZE) - 1) * SPACE_SIZE
+        y_axis = random.randint(0, (GAME_HEIGHT // SPACE_SIZE) - 1) * SPACE_SIZE
+        super().__init__(canvas, x_axis, y_axis)
 
         self.image = PhotoImage(file="food.png")
-        self.image_id = canvas.create_image(x, y, image=self.image, anchor="nw", tag = "food")
+        self.image_id = canvas.create_image(x_axis, y_axis, image=self.image, anchor="nw", tag = "food")
         canvas.food_image = self.image
-        
+
 def next_turn():
     global score, direction, food
 
-    x, y = snake.coordinates[0]
+    x_axis, y_axis = snake.coordinates[0]
 
     if direction == "up":
-        y -= SPACE_SIZE
+        y_axis -= SPACE_SIZE
     elif direction == "down":
-        y += SPACE_SIZE
+        y_axis += SPACE_SIZE
     elif direction == "left":
-        x -= SPACE_SIZE
+        x_axis -= SPACE_SIZE
     elif direction == "right":
-        x += SPACE_SIZE
+        x_axis += SPACE_SIZE
 
-    snake.grow(x, y)
+    snake.grow(x_axis, y_axis)
 
-    if x == food.coordinates[0] and y == food.coordinates[1]:
+    if x_axis == food.coordinates[0] and y_axis == food.coordinates[1]:
         eat_sound.play()
         score += 1
         label.config(text="Score:{}".format(score))
