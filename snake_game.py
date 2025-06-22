@@ -42,8 +42,11 @@ class Food(GameObject):
         x = random.randint(0, (GAME_WIDTH // SPACE_SIZE) - 1) * SPACE_SIZE
         y = random.randint(0, (GAME_HEIGHT // SPACE_SIZE) - 1) * SPACE_SIZE
         super().__init__(canvas, x, y)
-        self.canvas.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD_COLOR, tag="food")
 
+        self.image = PhotoImage(file="food.png")
+        self.image_id = canvas.create_image(x, y, image=self.image, anchor="nw", tag = "food")
+        canvas.food_image = self.image
+        
 def next_turn():
     global score, direction, food
 
