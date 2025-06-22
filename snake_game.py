@@ -1,5 +1,6 @@
 from tkinter import *
 import random
+import pygame
 
 GAME_WIDTH = 700
 GAME_HEIGHT = 700
@@ -119,6 +120,10 @@ window.bind('<Down>', lambda event: change_direction('down'))
 
 snake = Snake(canvas)
 food = Food(canvas)
+
+pygame.mixer.init()
+pygame.mixer.music.load(r"C:\Users\ACER\Desktop\final_project\adventure_time_bg_music.wav")
+pygame.mixer.music.play(-1)
 
 next_turn()
 window.mainloop()
