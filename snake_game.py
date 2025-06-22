@@ -2,8 +2,8 @@ from tkinter import *
 import random
 import pygame
 
-GAME_WIDTH = 700
-GAME_HEIGHT = 700
+GAME_WIDTH = 800
+GAME_HEIGHT = 600
 SPEED = 150
 SPACE_SIZE = 50
 BODY_PARTS = 3
@@ -109,10 +109,15 @@ label.pack()
 canvas = Canvas(window, bg=BACKGROUND_COLOR, height=GAME_HEIGHT, width=GAME_WIDTH)
 canvas.pack()
 
+#GRASS WALLPAPER
+background_image = PhotoImage(file="grass_bg.png")
+canvas.create_image(0, 0, image=background_image, anchor="nw")
+canvas.background = background_image
+
 window.update()
 x = int((window.winfo_screenwidth() / 2) - (window.winfo_width() / 2))
 y = int((window.winfo_screenheight() / 2) - (window.winfo_height() / 2))
-window.geometry(f"{window.winfo_width()}x{window.winfo_height()}+{x}+{y}")
+window.geometry(f"{GAME_WIDTH}x{GAME_HEIGHT + label.winfo_height()}+{x}+{y}")
 
 window.bind('<Left>', lambda event: change_direction('left'))
 window.bind('<Right>', lambda event: change_direction('right'))
