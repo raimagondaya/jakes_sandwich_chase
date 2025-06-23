@@ -156,7 +156,7 @@ def game_over():
     pygame.mixer.music.play(-1)
 
 window = Tk()
-window.title("Snake Game")
+window.title("Jake's Sandwich Chase")
 window.resizable(False, False)
 
 score = 0
