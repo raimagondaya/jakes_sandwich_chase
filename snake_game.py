@@ -147,6 +147,14 @@ def game_over():
     canvas.create_text(GAME_WIDTH / 2, GAME_HEIGHT / 2,
                        font=('consolas', 70), text="GAME OVER", fill="red", tag="gameover_text")
 
+    pygame.mixer.music.stop()
+
+    scream_sound = pygame.mixer.Sound("jake_scream_sound.wav")
+    scream_sound.play()
+
+    pygame.mixer.music.load("ending_bg_music.wav")
+    pygame.mixer.music.play(-1)
+
 window = Tk()
 window.title("Snake Game")
 window.resizable(False, False)
