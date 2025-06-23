@@ -31,7 +31,7 @@ class ImageLoader:
             "right": ImageTk.PhotoImage(base_image.rotate(-90))
         }
 
-class Snake(GameObject):
+class Jake(GameObject):
     def __init__(self, canvas):
         super().__init__(canvas, 0, 0)
         self.body_size = BODY_PARTS
@@ -102,13 +102,13 @@ class Food(GameObject):
 def next_turn():
     global score, direction, food
 
-    head_x_axis, head_y_axis = snake.coordinates[0]
+    head_x_axis, head_y_axis = jake.coordinates[0]
     move_map = {'up': (0, -SPACE_SIZE), 'down': (0, SPACE_SIZE), 'left': (-SPACE_SIZE, 0), 'right': (SPACE_SIZE, 0)}
     delta_x, delta_y = move_map[direction]
     new_x_axis = head_x_axis + delta_x
     new_y_axis = head_y_axis + delta_y
 
-    snake.grow(new_x_axis, new_y_axis)
+    jake.grow(new_x_axis, new_y_axis)
 
     food_x_axis, food_y_axis = food.get_position()
 
@@ -119,7 +119,7 @@ def next_turn():
         canvas.delete("food")
         food = Food(canvas)
     else:
-        snake.shrink()
+        jake.shrink()
 
     if check_collisions():
         game_over()
@@ -130,13 +130,13 @@ def change_direction(new_direction):
     global direction
     if direction != {'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left'}.get(new_direction):
         direction = new_direction
-        snake.set_direction(new_direction)
+        jake.set_direction(new_direction)
 
 def check_collisions():
-    x_axis, y_axis = snake.coordinates[0]
+    x_axis, y_axis = jake.coordinates[0]
     return (
         x_axis < 0 or x_axis >= GAME_WIDTH or y_axis < 0 or y_axis >= GAME_HEIGHT or
-        (x_axis, y_axis) in snake.coordinates[1:]
+        (x_axis, y_axis) in jake.coordinates[1:]
     )
 
 def game_over():
@@ -167,11 +167,11 @@ window.geometry(f"{GAME_WIDTH}x{GAME_HEIGHT + label.winfo_height()}+{int((window
 for key, direction_key in {'<Left>': 'left', '<Right>': 'right', '<Up>': 'up', '<Down>': 'down'}.items():
     window.bind(key, lambda event, d=direction_key: change_direction(d))
 
-snake = Snake(canvas)
+jake = Jake(canvas)
 food = Food(canvas)
 
 pygame.mixer.init()
-pygame.mixer.music.load(r"C:\\Users\\ACER\\Desktop\\final_project\\adventure_time_bg_music.wav")
+pygame.mixer.music.load("adventure_time_bg_music.wav")
 pygame.mixer.music.play(-1)
 
 eat_sound = pygame.mixer.Sound("eat_sound.wav")
