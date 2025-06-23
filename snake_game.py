@@ -141,8 +141,11 @@ def check_collisions():
 
 def game_over():
     canvas.delete(ALL)
-    canvas.create_text(canvas.winfo_width() / 2, canvas.winfo_height() / 2,
-                       font=('consolas', 70), text="GAME OVER", fill="red", tag="gameover")
+    game_over_background = PhotoImage(file="jake_ending.png")
+    canvas.create_image(0, 0, image=game_over_background, anchor="nw", tag="gameover_bg")
+    canvas.game_over_background = game_over_background
+    canvas.create_text(GAME_WIDTH / 2, GAME_HEIGHT / 2,
+                       font=('consolas', 70), text="GAME OVER", fill="red", tag="gameover_text")
 
 window = Tk()
 window.title("Snake Game")
