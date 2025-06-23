@@ -39,9 +39,9 @@ class Jake(GameObject):
         self.images = []
         self.current_direction = 'down'
 
-        self.head_images = ImageLoader.load_rotated_images("jake_head.png")
-        self.body_images = ImageLoader.load_rotated_images("jake_body.png")
-        self.tail_images = ImageLoader.load_rotated_images("jake_bottom.png")
+        self.head_images = ImageLoader.load_rotated_images("assets/jake_head.png")
+        self.body_images = ImageLoader.load_rotated_images("assets/jake_body.png")
+        self.tail_images = ImageLoader.load_rotated_images("assets/jake_bottom.png")
 
         for index, (x_axis, y_axis) in enumerate(self.coordinates):
             image = self._get_body_part_image(index)
@@ -95,7 +95,7 @@ class Food(GameObject):
         x_axis = random.randint(0, (GAME_WIDTH // SPACE_SIZE) - 1) * SPACE_SIZE
         y_axis = random.randint(0, (GAME_HEIGHT // SPACE_SIZE) - 1) * SPACE_SIZE
         super().__init__(canvas, x_axis, y_axis)
-        self.image = PhotoImage(file="food.png")
+        self.image = PhotoImage(file="assets/food.png")
         self.image_id = canvas.create_image(x_axis, y_axis, image=self.image, anchor="nw", tag="food")
         canvas.food_image = self.image
 
@@ -141,7 +141,7 @@ def check_collisions():
 
 def game_over():
     canvas.delete(ALL)
-    game_over_background = PhotoImage(file="jake_ending.png")
+    game_over_background = PhotoImage(file="assets/jake_ending.png")
     canvas.create_image(0, 0, image=game_over_background, anchor="nw", tag="gameover_bg")
     canvas.game_over_background = game_over_background
     canvas.create_text(GAME_WIDTH / 2, GAME_HEIGHT / 2,
@@ -149,10 +149,10 @@ def game_over():
 
     pygame.mixer.music.stop()
 
-    scream_sound = pygame.mixer.Sound("jake_scream_sound.wav")
+    scream_sound = pygame.mixer.Sound("assets/jake_scream_sound.wav")
     scream_sound.play()
 
-    pygame.mixer.music.load("ending_bg_music.wav")
+    pygame.mixer.music.load("assets/ending_bg_music.wav")
     pygame.mixer.music.play(-1)
 
 window = Tk()
@@ -168,7 +168,7 @@ label.pack()
 canvas = Canvas(window, bg=BACKGROUND_COLOR, height=GAME_HEIGHT, width=GAME_WIDTH)
 canvas.pack()
 
-background_image = PhotoImage(file="grass_bg.png")
+background_image = PhotoImage(file="assets/grass_bg.png")
 canvas.create_image(0, 0, image=background_image, anchor="nw")
 canvas.background = background_image
 
@@ -182,10 +182,10 @@ jake = Jake(canvas)
 food = Food(canvas)
 
 pygame.mixer.init()
-pygame.mixer.music.load("adventure_time_bg_music.wav")
+pygame.mixer.music.load("assets/adventure_time_bg_music.wav")
 pygame.mixer.music.play(-1)
 
-eat_sound = pygame.mixer.Sound("eat_sound.wav")
+eat_sound = pygame.mixer.Sound("assets/eat_sound.wav")
 
 next_turn()
 window.mainloop()
